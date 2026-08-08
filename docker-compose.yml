@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # Database box
+  db:
+    image: postgres:16-alpine
+    container_name: order-tracker-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: order_tracker
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # App box
+  app:
+    build: .
+    container_name: order-tracker-app
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/order_tracker
+      FLASK_ENV: production
+    ports:
+      - "5001:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    command: python run.py
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
