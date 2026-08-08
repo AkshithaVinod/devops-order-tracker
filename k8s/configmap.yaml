@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-tracker-config
+  namespace: order-tracker
+data:
+  FLASK_ENV: "production"
+  FLASK_APP: "app.main"
+  DATABASE_HOST: "order-tracker-postgres"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "order_tracker"
+  DATABASE_USER: "postgres"
