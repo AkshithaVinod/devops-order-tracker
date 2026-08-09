@@ -30,10 +30,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy Python packages from builder (stage 1)
 COPY --from=builder /root/.local /home/appuser/.local
 
-# Copy your app code
+# COPY --chown=appuser:appuser app/ app/
 COPY --chown=appuser:appuser app/ app/
 COPY --chown=appuser:appuser tests/ tests/
+COPY --chown=appuser:appuser run.py .
 COPY --chown=appuser:appuser requirements.txt .
+
 
 # Set environment variables
 ENV PATH=/home/appuser/.local/bin:$PATH \

@@ -29,8 +29,9 @@ spec:
     spec:
       containers:
       - name: app
-        image: 793820266340.dkr.ecr.us-east-1.amazonaws.com/devops-order-tracker:latest
-        imagePullPolicy: Always
+        image: devops-order-tracker:latest
+        imagePullPolicy: Never
+        command: ["python", "run.py"]
         ports:
         - containerPort: 5000
         env:
